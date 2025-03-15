@@ -1,0 +1,12 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+import os
+import kaggle
+
+import kagglehub
+
+# Download latest version
+ruchikakumbhar/calories-burnt-prediction"
+
+print("Path to dataset files:", path)
