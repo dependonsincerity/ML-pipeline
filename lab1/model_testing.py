@@ -11,26 +11,24 @@ def load_data(folder, filename):
 # Основная функция для тестирования модели
 def test_model():
     test_folder = 'test'
-    test_filename = 'test_temperature_data_scaled.csv'  # Изменено имя файла
+    test_filename = 'test_temperature_data_scaled.csv'
     
-    # Загрузка данных
     test_data = load_data(test_folder, test_filename)
     
-    # Разделение на признаки и целевую переменную
-    X_test = test_data[['temperature', 'humidity', 'wind_speed']]  # Используем новые признаки
-    y_test = test_data['temperature']  # Целевая переменная - температура (или другой столбец)
+    feature_columns = ['temperature', 'humidity', 'is_cloudy', 'season_spring', 'season_summer', 'season_fall']
     
-    # Загрузка модели из файла
-    model_filepath = "./model_temperature.pkl"  # Изменено имя файла модели
+    X_test = test_data[feature_columns]
+    y_test = test_data['temperature']
+    
+    model_filepath = "./model_temperature.pkl"
     with open(model_filepath, 'rb') as f:
         model = pickle.load(f)
     
-    # Предсказание
     y_pred = model.predict(X_test)
     
-    # Вычисление метрики (MSE)
     mse = mean_squared_error(y_test, y_pred)
     print(f"Model test MSE is: {mse:.3f}")
 
 if __name__ == "__main__":
     test_model()
+

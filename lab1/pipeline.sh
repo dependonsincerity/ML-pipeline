@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 pip install numpy pandas scikit-learn
 

@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('git_clone') {
             steps {
-                git branch: 'master', url: 'https://github.com/dependonsincerity/AUTO-ML.git' // URL вашего репозитория
+                git branch: 'master', url: 'https://github.com/dependonsincerity/AUTO-ML.git' // URL репозитория
                 dir("lab1") {
                     sh "python3 -m venv ./venv"
                     sh ". ./venv/bin/activate"
@@ -15,28 +15,28 @@ pipeline {
         stage('data_creation') {
             steps {
                 dir('lab1') {
-                    sh "venv/bin/python3 data_creation.py" // Ваш скрипт для создания данных
+                    sh "venv/bin/python3 data_creation.py" // скрипт для создания данных
                 }
             }
         }
         stage('data_preprocessing') {
             steps {
                 dir('lab1') {
-                    sh "venv/bin/python3 data_preprocessing.py" // Ваш скрипт для предобработки данных
+                    sh "venv/bin/python3 data_preprocessing.py" // скрипт для предобработки данных
                 }
             }
         }
         stage('model_preparation') {
             steps {
                 dir('lab1') {
-                    sh "venv/bin/python3 model_preparation.py" // Ваш скрипт для подготовки модели
+                    sh "venv/bin/python3 model_preparation.py" // скрипт для подготовки модели
                 }
             }
         }
         stage('model_testing') {
             steps {
                 dir('lab1') {
-                    sh "venv/bin/python3 model_testing.py" // Ваш скрипт для тестирования модели
+                    sh "venv/bin/python3 model_testing.py" // скрипт для тестирования модели
                 }
             }
         }

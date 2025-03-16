@@ -66,7 +66,7 @@ def generate_temperature_data(days=100, noise_level=0.1, anomaly_probability=0.0
                 'temperature': temperature,
                 'humidity': humidity,
                 'is_cloudy': int(is_cloudy),
-                'season': 'winter' if day < 60 else ('spring' if 60 <= day < 180 else ('summer' if 180 <= day < 300 else 'autumn'))
+                'season': 'winter' if day < 60 else ('spring' if 60 <= day < 180 else ('summer' if 180 <= day < 300 else 'fall'))
             })
     
     return pd.DataFrame(data)

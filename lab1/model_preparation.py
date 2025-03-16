@@ -11,21 +11,20 @@ def load_data(folder, filename):
 # Основная функция для обучения модели
 def prepare_model():
     train_folder = 'train'
-    train_filename = 'train_temperature_data_scaled.csv'  # Изменено имя файла
+    train_filename = 'train_temperature_data_scaled.csv'
     
-    # Загрузка данных
     train_data = load_data(train_folder, train_filename)
     
-    # Разделение на признаки и целевую переменную
-    X_train = train_data[['temperature', 'humidity', 'wind_speed']]  # Используем новые признаки
-    y_train = train_data['temperature']  # Целевая переменная - температура (или другой столбец)
+    # Обновляем список признаков
+    feature_columns = ['temperature', 'humidity', 'is_cloudy', 'season_spring', 'season_summer', 'season_fall']
     
-    # Создание и обучение модели
+    X_train = train_data[feature_columns]
+    y_train = train_data['temperature']
+    
     model = LinearRegression()
     model.fit(X_train, y_train)
     
-    # Сохранение модели в файл
-    model_filepath = "model_temperature.pkl"  # Изменено имя файла модели
+    model_filepath = "model_temperature.pkl"
     with open(model_filepath, 'wb') as f:
         pickle.dump(model, f)
     

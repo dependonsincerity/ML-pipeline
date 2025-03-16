@@ -18,36 +18,47 @@ def preprocess_data():
     train_folder = 'train'
     test_folder = 'test'
     
-    train_filename = 'train_temperature_data.csv'  # Изменено название на новое
-    test_filename = 'test_temperature_data.csv'  # Изменено название на новое
+    train_filename = 'train_temperature_data.csv'
+    test_filename = 'test_temperature_data.csv'
     
     # Загрузка данных
     train_data = load_data(train_folder, train_filename)
     test_data = load_data(test_folder, test_filename)
     
-    # Извлечение признаков для масштабирования
-    features_to_scale = ['temperature', 'humidity', 'wind_speed']  # Используем новые признаки
+    # One-hot encoding для season
+    train_data = pd.get_dummies(train_data, columns=['season'], drop_first=False)
+    test_data = pd.get_dummies(test_data, columns=['season'], drop_first=False)
     
-    X_train = train_data[features_to_scale]
-    X_test = test_data[features_to_scale]
+    # Проверим, чтобы все сезоны были во всех наборах (если нет — добавляем)
+    for season in ['season_winter', 'season_spring', 'season_summer', 'season_fall']:
+        if season not in train_data.columns:
+            train_data[season] = 0
+        if season not in test_data.columns:
+            test_data[season] = 0
     
-    # Создание объекта StandardScaler
+    # Убедимся, что все season столбцы в одном порядке
+    season_columns = ['season_winter', 'season_spring', 'season_summer', 'season_fall']
+    train_data = train_data[['day', 'hour', 'temperature', 'humidity', 'is_cloudy'] + season_columns]
+    test_data = test_data[['day', 'hour', 'temperature', 'humidity', 'is_cloudy'] + season_columns]
+    
+    # Масштабирование признаков
+    features_to_scale = ['temperature', 'humidity']
+    
     scaler = StandardScaler()
+    train_data[features_to_scale] = scaler.fit_transform(train_data[features_to_scale])
+    test_data[features_to_scale] = scaler.transform(test_data[features_to_scale])
     
-    # Масштабирование данных
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    # Преобразуем бинарные признаки к типу int
+    train_data['is_cloudy'] = train_data['is_cloudy'].astype(int)
+    test_data['is_cloudy'] = test_data['is_cloudy'].astype(int)
     
-    # Создание новых DataFrame с масштабированными данными
-    train_data_scaled = train_data.copy()
-    test_data_scaled = test_data.copy()
-    
-    train_data_scaled[features_to_scale] = X_train_scaled
-    test_data_scaled[features_to_scale] = X_test_scaled
+    for season in season_columns:
+        train_data[season] = train_data[season].astype(int)
+        test_data[season] = test_data[season].astype(int)
     
     # Сохранение предобработанных данных
-    save_data_to_csv(train_data_scaled, train_folder, 'train_temperature_data_scaled.csv')  # Изменено название на новое
-    save_data_to_csv(test_data_scaled, test_folder, 'test_temperature_data_scaled.csv')  # Изменено название на новое
+    save_data_to_csv(train_data, train_folder, 'train_temperature_data_scaled.csv')
+    save_data_to_csv(test_data, test_folder, 'test_temperature_data_scaled.csv')
 
 if __name__ == "__main__":
     preprocess_data()
