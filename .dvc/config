@@ -1,0 +1,7 @@
+[core]
+    remote = myremote
+['remote "gdrive_storage"']
+    url = gdrive://1--2XrUywPhmsj2lmYq8MQdcibwBvn6Vf
+    gdrive_use_service_account = false
+['remote "myremote"']
+    url = /mnt/c/Users/klimo/Desktop/Ycheba/Automat ML/dvc_storage
